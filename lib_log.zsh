@@ -2,7 +2,7 @@
 
 # Import library that has a function that checks if a string
 # contains a substring
-. $HOME/dev/shell-libraries/lib_string.zsh
+. "$CURRENT_DIR/shell-libraries/lib_string.zsh"
 
 current_shell=$(ps -p $$ | awk 'FNR == 2 {print $4}')
 
@@ -23,6 +23,9 @@ readonly LOG_NOTICE=$((LOG_WARNING+1))
 readonly LOG_INFO=$((LOG_NOTICE+1))
 readonly LOG_DEBUG=$((LOG_INFO+1))
 
+# Set default log facility
+readonly FACILITY="user"
+
 # Set default verbose level
 verbose_level=$LOG_ERR
 
@@ -32,5 +35,6 @@ verbose_level=$LOG_ERR
 
 	if [ $verbose_level -ge $LEVEL ]; then
 		echo "[${LOG_LEVELS[$LEVEL]}]" "$2"
+		logger --id=$$ "$2" -p "$FACILITY.${LOG_LEVELS[$LEVEL]}"
 	fi
 }
